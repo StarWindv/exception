@@ -13,7 +13,7 @@ pub struct Exception<T: Transform<T>> {
     /// 因为全是递归
     /// 所以最后想到了使用结构体指针的方法
     pub property : Box<Property<T>>,
-    pub mutex_ptr: T/* 任意一个实现了 Down 特征的结构体指针 */
+    pub target_ptr: T
 }
 
 impl<T: Transform<T>> Error for Exception<T> {}
@@ -26,7 +26,13 @@ impl<T: Transform<T>> Display for Exception<T> {
                 let downgrade = format!(
                     "{}\n{}\n{}\n{}",
                     format!("name :  {}", self.property.name),
-                    format!("cause:  {}", self.property.clone().cause),
+                    format!(
+                        "cause:  {:?}",
+                        match &self.property.cause {
+                            Some(cause) => write!(f, "cause: {}", cause),
+                            None => write!(f, "cause: none"),
+                        }
+                    ),
                     format!("context:{}", self.property.context.join("\n - ")),
                     format!("other:  {:#?}", self.property.other),
                 );
@@ -46,11 +52,11 @@ impl<T: Transform<T> + Clone> ExceptionUtils<T> for Exception<T> {
     }
 
     fn get_ptr(&self) -> T {
-        self.mutex_ptr.clone()
+        self.target_ptr.clone()
     }
 
     fn set_ptr(&mut self, ptr: T) {
-        self.mutex_ptr = ptr;
+        self.target_ptr = ptr;
     }
 }
 

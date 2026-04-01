@@ -23,12 +23,23 @@ where T: Transform<T>
     // 而暂未实现的 up
     // 它代表的是向上, 也就是转型到高层抽象去
     fn down(this: T) -> Exception<T> {
+        let mut inner = this.clone();
+        inner.set_property(Box::new(Property {
+            name: "".to_string(),
+            ..Default::default()
+        }));
         Exception {
             // 这里必须是 this 或者不是 self 的名字,
             // 不然编译过不去(rust 不认识 Self 和 T 的关系),
             // 所以手动传递一下对象也是代价的一部分
             property : this.get_property(),
-            mutex_ptr: this.clone(),
+            target_ptr: inner
         }
+    }
+
+    fn up(this: Exception<T>) -> T {
+        let mut result = this.target_ptr;
+        result.set_property(this.property.clone());
+        result
     }
 }
