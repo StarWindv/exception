@@ -1,0 +1,33 @@
+这个库的来历...
+
+怎么说呢, 起因是我前些天在本地开发一个 Agent 应用, 但是逻辑层各种`thiserror`定义的错误, 相当难传递, 也不好透传
+
+但是`anyhow!`的异常类型又过于松散了, 所以我就想能不能做一个`有点儿严肃`的错误处理系统?
+
+其实一切的起因都是`rust`自身的错误系统导致的
+
+如果它只是返回Result、map_err、?、unwrap这些我其实都能接受，
+
+重点是，rust 的错误是没有继承链的, 所有的不管什么 Error 永远都是各自为政
+
+你永远不能写一个精简的函数然后将错误A和错误B都转换到自定义的错误C上
+
+用了泛型后又因为 lib 自定义的 `Error` 与 `std` 的 `Error`、`io::Error` 以及不知道是谁的 `Error` 不兼容
+
+得写无数个 `impl From<xxxx> for Xyz`, 你的`Result<_, 错误>`的"错误"永远不能只写一个"Error"上去
+ —— `Error` 是谁? 哪个库的`Error`? 你的"?"如何转换过去?
+
+`thiserror`的`Error`宏也压根不是一个"父", 
+
+你定义的`TypeError`、`ValueError`、`SocketError`、`APIError`、`ServicesError`永远都是<b>不同的</b>`Error`
+
+`thiserror`的宏就是一个骗局, 用一整个enum又会变得极其臃肿丑陋, 
+
+有的通用错误又需要涵盖各种常见类型来写From，拆分成不同组件的Error又会引起前面提到的问题
+
+而用`anyhow` 
+
+你让我自己处理他是什么错误类型、获取完全不结构化的错误信息, 这更不可以了
+ —— 写脚本谁用`rust`?
+
+我们要的从来都不是完整的`Traceback`, 而是一个好用的通用的可以放到`Result`的第二个参数上的`Exception`, 怎么就能这么难? 真他妈操蛋啊
