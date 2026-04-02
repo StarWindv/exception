@@ -35,6 +35,7 @@ fn main() {
             write!(f, "{}", self.property.name)
         }
     }
+
     let value_err = ValueError {
         property: Box::new(
             Property {
@@ -45,7 +46,6 @@ fn main() {
             }
         )
     };
-
 
     eprintln!("{:#?}\n", value_err);
 
