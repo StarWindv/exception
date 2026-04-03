@@ -5,7 +5,9 @@
     since = "0.1.3",
     note = "This package has been merged with `alright` package"
 )]
-pub use alright::commonly::*;
+pub use alright::traits::{
+    PromiseErr, AlrightBox, AlrightError
+};
 pub mod commonly_exceptions {
     pub use alright::commonly::{
         Exception,
