@@ -2,7 +2,7 @@ use serde::Serialize;
 use serde_json::{Map, Value};
 
 use crate::modules::types::exception::BaseException;
-use crate::traits::{Transform};
+use crate::modules::traits::transform::Transform;
 
 #[derive(Debug, Serialize, Clone)]
 pub struct Property<T: Transform> {

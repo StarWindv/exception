@@ -8,6 +8,19 @@ pub(crate) fn implement(struct_name: &syn::Ident, property_name: &syn::Ident) ->
     TokenStream::from(quote! {
         impl Transform for #struct_name {}
         impl PromiseErr for #struct_name {}
+        impl ::std::default::Default for #struct_name {
+           fn default() -> Self {
+               Self {
+                   property: ::std::boxed::Box::new(
+                       ::alright::Property
+                       {
+                           name: stringify!(#struct_name).to_string(),
+                           ..Default::default()
+                       }
+                   ),
+               }
+           }
+       }
         impl ExceptionUtils<#struct_name> for #struct_name {
             fn get_property(&self) -> Box<Property<#struct_name>> {
                 self.#property_name.clone()
@@ -23,8 +36,8 @@ pub(crate) fn implement(struct_name: &syn::Ident, property_name: &syn::Ident) ->
             }
         }
 
-        impl std::convert::From<alright::types::exception::BaseException<#struct_name>> for #struct_name {
-            fn from(value: alright::types::exception::BaseException<#struct_name>) -> Self {
+        impl std::convert::From<alright::BaseException<#struct_name>> for #struct_name {
+            fn from(value: alright::BaseException<#struct_name>) -> Self {
                 #struct_name::up(value)
             }
         }

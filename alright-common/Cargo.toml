@@ -8,9 +8,7 @@ homepage.workspace = true
 description.workspace = true
 
 [dependencies]
-alright = { path = "../alright", version = "0.1.1" }
-alright-derive = { path = "../alright-derive", version = "0.1.1"}
-serde = { version = "1.0.228", features = ["derive"] }
+alright = { version = "0.1.3", path = "../alright" }
 
 [lib]
 path = "src/lib.rs"

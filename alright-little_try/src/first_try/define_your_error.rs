@@ -6,10 +6,10 @@ use alright::{
         ExceptionUtils,
         TemplateDisplay,
         Transform,
+        PromiseErr,
     },
-    types::property::Property
+    Property
 };
-use alright_common::PromiseErr;
 
 #[derive(Debug, Clone, Serialize, Default)]
 pub struct MyError {

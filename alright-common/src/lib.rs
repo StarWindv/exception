@@ -1,27 +1,59 @@
-use alright::{
-    types::exception::BaseException,
-    traits::{ExceptionUtils, Transform}
-};
-use std::error::Error;
-use std::fmt::Debug;
-
-mod modules;
-pub use modules::*;
-
-pub trait PromiseErr: Debug + Error {}
-
-impl<T: Transform> PromiseErr for BaseException<T> {}
-
-pub type AlrightBox = Box<dyn PromiseErr>;
-
-pub trait AlrightError: Error + Sized {
-    type PromiseErr: PromiseErr;
-    fn into_exception(self) -> BaseException<Self::PromiseErr> where <Self as AlrightError>::PromiseErr: Transform;
-}
-
-impl<T: Transform + Error + PromiseErr + ExceptionUtils<T>> AlrightError for T {
-    type PromiseErr = T;
-    fn into_exception(self) -> BaseException<Self::PromiseErr> {
-        self.into()
-    }
+// alright-common
+// github.com/StarWindv/alright.git
+// GPL-3.0-Only
+#[deprecated(
+    since = "0.1.3",
+    note = "This package has been merged with `alright` package"
+)]
+pub use alright::commonly::*;
+pub mod commonly_exceptions {
+    pub use alright::commonly::{
+        Exception,
+        JustException,
+        GeneratorExit,
+        KeyboardInterrupt,
+        SystemExit,
+        ArithmeticError,
+        AssertionError,
+        AttributeError,
+        BufferError,
+        EOFError,
+        MemoryError,
+        NameError,
+        ReferenceError,
+        RuntimeError,
+        StopAsyncIteration,
+        StopIteration,
+        SystemError,
+        TypeError,
+        ValueError,
+        FloatingPointError,
+        OverflowError,
+        ZeroDivisionError,
+        BlockingIOError,
+        ChildProcessError,
+        ConnectionError,
+        FileExistsError,
+        FileNotFoundError,
+        InterruptedError,
+        IsADirectoryError,
+        NotADirectoryError,
+        PermissionError,
+        ProcessLookupError,
+        TimeoutError,
+        IndexError,
+        KeyError,
+        NotImplementedError,
+        RecursionError,
+        UnicodeError,
+        BrokenPipeError,
+        ConnectionAbortedError,
+        ConnectionRefusedError,
+        ConnectionResetError,
+        UnicodeDecodeError,
+        UnicodeEncodeError,
+        UnicodeTranslateError,
+        ExceptionGroup,
+        OSError,
+    };
 }

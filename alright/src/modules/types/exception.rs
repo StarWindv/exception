@@ -2,7 +2,7 @@ use serde::Serialize;
 
 use super::{
     property::Property,
-    super::traits::Transform
+    super::traits::transform::Transform
 };
 
 #[derive(Debug, Clone, Serialize, Default)]

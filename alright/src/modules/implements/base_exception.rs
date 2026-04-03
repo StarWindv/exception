@@ -1,12 +1,14 @@
 use crate::{
-    modules::types::{
-        exception::BaseException, 
-        property::Property
-    },
-    traits::{
-        Transform,
-        ExceptionUtils,
-        TemplateDisplay
+    modules::{
+        types::{
+            exception::BaseException,
+            property::Property,
+        },
+        traits::{
+            transform::Transform,
+            exception_utils::ExceptionUtils,
+            template_display::TemplateDisplay,
+        }
     },
 };
 use std::error::Error;

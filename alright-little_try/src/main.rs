@@ -1,7 +1,9 @@
-use alright_common::{
-    AlrightBox,
-    JustException,
-    ValueError,
+use alright::{
+    commonly::{
+        JustException,
+        ValueError,
+    },
+    traits::AlrightBox
 };
 use alright_little_try::{
     define_your_error::MyError,

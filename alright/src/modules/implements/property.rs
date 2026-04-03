@@ -1,6 +1,12 @@
 use std::any::type_name;
-use crate::modules::types::{exception::BaseException, property::Property};
-use crate::traits::Transform;
+use crate::modules::{
+    traits::transform::Transform,
+    types::{
+        exception::BaseException,
+        property::Property
+    }
+};
+
 use serde_json::{Map, Value};
 
 impl<T: Transform > Default for Property<T> {
@@ -30,6 +36,10 @@ impl<T: Transform + Default> Property<T> {
 
     pub fn add(&mut self, msg: impl Into<String>) {
         self.context.push(msg.into());
+    }
+    
+    pub fn context(&mut self, msg: impl Into<String>) {
+        self.add(msg.into());
     }
 
     pub fn update(

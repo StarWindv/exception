@@ -2,19 +2,17 @@ use alright::{
     traits::{
         ExceptionUtils,
         Transform,
-        TemplateDisplay
+        TemplateDisplay,
+        PromiseErr,
     },
-    types::property::Property,
+    Property,
 };
-use alright_common::{
-    PromiseErr,
-};
-use alright_derive::Exception;
+use alright::Exception;
 use serde::Serialize;
 
 // Using all above imports
 // and add the derive macro `Exception` to your struct
-#[derive(Exception, Debug, Clone, Serialize, Default)]
+#[derive(Exception, Debug, Clone, Serialize)]
 pub struct AnotherMyError {
     pub property: Box<Property<AnotherMyError>>,
 }

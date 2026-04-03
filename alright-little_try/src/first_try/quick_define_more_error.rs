@@ -1,11 +1,11 @@
-use alright_common::PromiseErr;
 use alright::{
     exceptions,
-    types::property::Property,
+    Property,
     traits::{
         ExceptionUtils,
         TemplateDisplay,
-        Transform
+        Transform,
+        PromiseErr
     },
 };
 // Using these
