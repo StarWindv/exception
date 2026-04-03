@@ -1,16 +1,12 @@
+use crate::PromiseErr;
 use alright::{
     exceptions,
-    modules::types::{
-        exception::BaseException,
-        property::Property
-    },
-    traits::{
-        ExceptionUtils, Transform
-    }
+    modules::types::property::Property,
+    traits::{Transform, ExceptionUtils, TemplateDisplay},
 };
 
 exceptions!(
-    OnlyException,
+    JustException,
     GeneratorExit,
     KeyboardInterrupt,
     SystemExit,

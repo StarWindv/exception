@@ -1,65 +1,56 @@
-use std::error::Error;
-use std::fmt::{Display, Formatter};
 use crate::{
     modules::types::{
-        property::Property,
-        exception::BaseException
+        exception::BaseException, 
+        property::Property
     },
-    traits::{ExceptionUtils, Transform}
+    traits::{
+        Transform,
+        ExceptionUtils,
+        TemplateDisplay
+    },
+};
+use std::error::Error;
+use std::fmt::{
+    Display,
+    Formatter
 };
 
-impl<T: Transform<T>> Error for BaseException<T> {}
+impl<T: Transform> Error for BaseException<T> {}
+impl<T: Transform> Transform for BaseException<T> {}
+impl<T: Transform> TemplateDisplay<T> for BaseException<T> {}
 
-impl<T: Transform<T>> Display for BaseException<T> {
+impl<T: Transform> Display for BaseException<T> {
     fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
-        match serde_json::ser::to_string_pretty(&self.property) {
-            Ok(json) => write!(f, "{}", json),
-            Err(_) => {
-                let downgrade = format!(
-                    "{}\n{}\n{}\n{}",
-                    format!("name :  {}", self.property.name),
-                    format!(
-                        "cause:  {:?}",
-                        match &self.property.cause {
-                            Some(cause) => write!(f, "cause: {}", cause),
-                            None => write!(f, "cause: none"),
-                        }
-                    ),
-                    format!("context:{}", self.property.context.join("\n - ")),
-                    format!("other:  {:#?}", self.property.other),
-                );
-                write!(f, "{}", downgrade)
-            }
-        }
+        self.template_fmt(f)
     }
 }
 
-impl<T: Transform<T> + Clone> ExceptionUtils<T> for BaseException<T> {
-    fn get_property(&self) -> Box<Property<T>> {
+impl<T: Transform + Clone> ExceptionUtils<T> for BaseException<T> {
+    fn get_property (&self) -> Box<Property<T>>
+    where Self: Transform
+    {
         self.property.clone()
     }
 
-    fn set_property(&mut self, property: Box<Property<T>>) {
+    fn set_property (&mut self, property: Box<Property<T>>) {
         self.property = property;
     }
 
-    fn get_ptr(&self) -> T {
+    fn get_ptr (&self) -> T {
         self.target_ptr.clone()
     }
 
-    fn set_ptr(&mut self, ptr: T) {
+    fn set_ptr (&mut self, ptr: T) {
         self.target_ptr = ptr;
     }
 }
 
-impl<T: Transform<T>> Transform<T> for BaseException<T> {}
-
-impl<T: Transform<T>> From<T> for BaseException<T> {
+impl<T: Transform + ExceptionUtils<T>> From<T> for BaseException<T> {
     fn from(value: T) -> Self {
-        T::down(value)
+        T::down(&value)
     }
 }
 
-impl<T: Transform<T>> BaseException<T> {
-
+impl<T: Transform> BaseException<T> {
+    // TODO: Builder
 }
